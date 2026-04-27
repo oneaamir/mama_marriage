@@ -36,36 +36,62 @@ export default function InvitationCard({ data, lang, ready }) {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     const ctx = gsap.context(() => {
-      // Cover entrance after intro fade.
+      // Cover entrance — runs immediately as the video starts fading, so the
+      // hero text appears smoothly without a blank pause.
       gsap.from(heroBlockRef.current, {
         opacity: 0,
-        y: 18,
-        duration: 1.4,
-        delay: 0.2,
+        y: 14,
+        duration: 0.85,
+        delay: 0,
         ease: "power2.out",
       });
       gsap.from(scrollHintRef.current, {
         opacity: 0,
-        duration: 1.2,
-        delay: 1.6,
+        duration: 0.9,
+        delay: 0.9,
         ease: "power1.out",
       });
 
-      // Paper-panel reveals — used in both reduced and normal modes.
+      // Paper panels: scroll-progress-driven reveal so they rise/fade in time
+      // with the user's scroll and reverse smoothly when scrolling back up.
       gsap.utils.toArray(".paper-panel").forEach((el) => {
+        if (reduce) {
+          gsap.fromTo(
+            el,
+            { opacity: 0, y: 24, filter: "blur(0px)" },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.6,
+              ease: "power1.out",
+              scrollTrigger: { trigger: el, start: "top 88%" },
+            }
+          );
+          return;
+        }
         gsap.fromTo(
           el,
-          { opacity: 0, y: 48, filter: "blur(8px)" },
+          {
+            opacity: 0,
+            y: 70,
+            scale: 0.95,
+            filter: "blur(10px)",
+            boxShadow:
+              "0 8px 16px -8px rgba(90,56,24,0.18), 0 4px 10px rgba(90,56,24,0.10), 0 0 30px rgba(248,217,139,0.05), inset 0 0 30px rgba(255,247,232,0.30)",
+          },
           {
             opacity: 1,
             y: 0,
+            scale: 1,
             filter: "blur(0px)",
-            duration: reduce ? 0.6 : 1.0,
-            ease: "power2.out",
+            boxShadow:
+              "0 36px 64px -22px rgba(90,56,24,0.42), 0 18px 32px rgba(90,56,24,0.24), 0 0 80px rgba(248,217,139,0.22), inset 0 0 36px rgba(255,247,232,0.45)",
+            ease: "none",
             scrollTrigger: {
               trigger: el,
-              start: "top 82%",
-              toggleActions: "play none none reverse",
+              start: "top 92%",
+              end: "top 58%",
+              scrub: 0.6,
             },
           }
         );
@@ -73,23 +99,28 @@ export default function InvitationCard({ data, lang, ready }) {
 
       if (reduce) return;
 
-      // Cover card lifts as the hero section scrolls past.
+      // Cover card lifts gently on scroll — scrubbed so it reverses smoothly
+      // back to its resting state. Shadow stays light and warm so a partial
+      // scroll never reveals a dark patch behind/under the card.
       gsap.to(coverCardRef.current, {
-        y: -70,
-        scale: 0.94,
-        opacity: 0.65,
+        y: -55,
+        scale: 0.96,
+        boxShadow:
+          "0 44px 80px -28px rgba(90,56,24,0.30), 0 20px 36px rgba(90,56,24,0.18), 0 0 130px rgba(248,217,139,0.42)",
         ease: "none",
+        transformPerspective: 1100,
+        transformOrigin: "center top",
         scrollTrigger: {
           trigger: heroSectionRef.current,
           start: "top top",
           end: "bottom 30%",
-          scrub: 0.6,
+          scrub: 0.3,
         },
       });
 
-      // Hero background blurs and darkens slightly so panels feel separate.
+      // Hero background only blurs — no darkening, so ivory/gold tones stay warm.
       gsap.to(heroBgRef.current, {
-        filter: "blur(14px) brightness(0.7)",
+        filter: "blur(14px) brightness(1.02)",
         scale: 1.06,
         ease: "none",
         scrollTrigger: {
@@ -159,24 +190,33 @@ export default function InvitationCard({ data, lang, ready }) {
           className="absolute inset-0 w-full h-full object-cover"
           draggable={false}
         />
+        {/* Warm ivory/gold halo — no dark vignette. Keeps the page on a
+            premium ivory tone instead of black at the edges. */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
             background:
-              "radial-gradient(ellipse at center, rgba(0,0,0,0) 35%, rgba(26,15,8,0.55) 100%)",
+              "radial-gradient(ellipse at center, rgba(255,247,232,0.0) 38%, rgba(216,180,106,0.18) 100%)",
+          }}
+        />
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              "linear-gradient(to bottom, rgba(244,232,208,0.0) 70%, rgba(244,232,208,0.55) 100%)",
           }}
         />
 
         {/* COVER CARD — invitation cover. Stays compact, lifts on scroll. */}
         <div
           ref={coverCardRef}
-          className="relative paper-grain border-glint card-3d"
+          className="relative paper-grain border-glint card-3d rim-light"
           style={{
             width: "min(86vw, 420px)",
             border: "1px solid rgba(184,138,59,0.7)",
             borderRadius: "10px",
             boxShadow:
-              "0 32px 60px -22px rgba(58,36,20,0.6), 0 14px 26px rgba(58,36,20,0.3), 0 0 70px rgba(248,217,139,0.18)",
+              "0 28px 54px -22px rgba(90,56,24,0.26), 0 12px 22px rgba(90,56,24,0.14), 0 0 80px rgba(248,217,139,0.22)",
             padding: "32px 24px",
             zIndex: 10,
           }}
@@ -220,10 +260,10 @@ export default function InvitationCard({ data, lang, ready }) {
         {/* Scroll hint sits below the cover, never under the card. */}
         <div
           ref={scrollHintRef}
-          className="scroll-hint absolute left-0 right-0 bottom-7 sm:bottom-10 text-center text-ivory/85 text-[10.5px] tracking-[0.36em] uppercase z-10"
+          className="scroll-hint absolute left-0 right-0 bottom-7 sm:bottom-10 text-center text-deepbrown/85 text-[10.5px] tracking-[0.36em] uppercase z-10"
         >
           <div className="mb-1.5">{t(data.sections.hero.scrollHint, lang)}</div>
-          <div className="mx-auto w-[1px] h-7 bg-antiquegold/80" />
+          <div className="mx-auto w-[1px] h-7 bg-antiquegold" />
         </div>
       </section>
 

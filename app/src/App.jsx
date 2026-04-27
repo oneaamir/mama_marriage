@@ -26,28 +26,49 @@ export default function App() {
 
   return (
     <div className="relative min-h-screen text-deepbrown">
-      {/* Ambient backdrop: same final-frame, heavily blurred and dim, fixed
-          behind the whole page so panels float in the same wedding setting. */}
-      <div className="fixed inset-0 -z-10 bg-[#1a0f08]" aria-hidden>
+      {/* Ambient backdrop: the final-frame is the page background everywhere.
+          The photo stays visible (light blur + light warm tint) so the page
+          continues from the video's final frame on every section — never a
+          flat solid color, never darkened. */}
+      <div className="fixed inset-0 z-0 bg-ivory" aria-hidden>
         <img
           src={data.theme.assets.finalFrame}
           alt=""
           className="absolute inset-0 w-full h-full object-cover"
-          style={{ filter: "blur(22px) brightness(0.55) saturate(0.95)", transform: "scale(1.12)" }}
+          style={{
+            filter: "blur(14px) brightness(1.06) saturate(1.08)",
+            transform: "scale(1.06) translateZ(0)",
+            willChange: "transform",
+          }}
           draggable={false}
         />
+        {/* Light warm ivory tint — keeps the photo clearly visible but warms
+            the whole page so dark frame areas don't read as flat brown. */}
+        <div
+          className="absolute inset-0"
+          style={{ backgroundColor: "rgba(244,232,208,0.22)" }}
+        />
+        {/* Soft gold radial glow at center for premium depth. */}
         <div
           className="absolute inset-0"
           style={{
             background:
-              "radial-gradient(ellipse at center, rgba(248,217,139,0.10) 0%, rgba(26,15,8,0.0) 35%, rgba(26,15,8,0.55) 90%)",
+              "radial-gradient(ellipse at 50% 40%, rgba(248,217,139,0.18) 0%, rgba(248,217,139,0.06) 40%, transparent 75%)",
+          }}
+        />
+        {/* Very subtle warm vertical gradient — gold at bottom, no dark. */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(to bottom, rgba(255,247,232,0.06) 0%, rgba(244,232,208,0.0) 40%, rgba(216,180,106,0.10) 100%)",
           }}
         />
       </div>
 
       <LanguageToggle lang={lang} onToggle={toggle} />
 
-      {introDone && !reduced && <Particles count={8} enabled />}
+      {introDone && !reduced && <Particles count={6} enabled />}
 
       <IntroVideo
         src={data.theme.assets.introVideo}
@@ -59,7 +80,7 @@ export default function App() {
         <InvitationCard data={data} lang={lang} ready={introDone} />
       </main>
 
-      <footer className="relative z-10 text-center py-6 text-deepgold/75 text-[11px] tracking-[0.32em] uppercase">
+      <footer className="relative z-10 text-center py-7 text-deepbrown/80 text-[11px] tracking-[0.32em] uppercase">
         {lang === "hi" ? "हार्दिक धन्यवाद" : "With Love & Gratitude"}
       </footer>
     </div>

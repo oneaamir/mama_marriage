@@ -23,7 +23,7 @@ function pad(n, w = 2) {
 
 function Tile({ value, label, width = 2 }) {
   return (
-    <div className="jewel-tile border-glint flex flex-col items-center justify-center px-3 py-4 sm:py-5 min-w-[78px] sm:min-w-[100px]">
+    <div className="jewel-tile border-glint rim-light-soft relative flex flex-col items-center justify-center px-3 py-4 sm:py-5 min-w-[78px] sm:min-w-[100px]">
       <DigitRoll value={value} width={width} />
       <div className="mt-1.5 text-[10.5px] sm:text-[11.5px] tracking-[0.22em] text-deepgold/95 uppercase">
         {label}
@@ -49,12 +49,13 @@ function DigitRoll({ value, width }) {
   return (
     <div className="overflow-hidden h-[40px] sm:h-[50px] flex items-center">
       <span
-        className="tabular gold-foil-stable text-[32px] sm:text-[40px] font-display font-semibold leading-none transition-all duration-[420ms] ease-out"
+        className="tabular text-deepbrown text-[32px] sm:text-[40px] font-display font-semibold leading-none transition-all duration-[420ms] ease-out"
         style={{
           transform: rolling ? "translateY(-8px)" : "translateY(0)",
           opacity: rolling ? 0.2 : 1,
           filter: rolling ? "blur(2px)" : "blur(0)",
           letterSpacing: "0.04em",
+          textShadow: "0 1px 0 rgba(255,247,232,0.85), 0 -1px 0 rgba(184,138,59,0.25)",
         }}
       >
         {pad(display, width)}

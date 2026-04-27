@@ -3,13 +3,13 @@
 export default function Panel({ children, ornate = true, className = "" }) {
   return (
     <article
-      className={`paper-panel relative paper-grain border-glint w-full ${className}`}
+      className={`paper-panel relative paper-grain border-glint rim-light w-full ${className}`}
       style={{
         maxWidth: "min(94vw, 540px)",
         border: "1px solid rgba(184,138,59,0.7)",
         borderRadius: "12px",
         boxShadow:
-          "0 30px 50px -22px rgba(58,36,20,0.55), 0 12px 22px rgba(58,36,20,0.25), 0 0 60px rgba(248,217,139,0.12), inset 0 0 30px rgba(255,247,232,0.35)",
+          "0 30px 56px -22px rgba(90,56,24,0.42), 0 14px 26px rgba(90,56,24,0.22), 0 0 70px rgba(248,217,139,0.18), inset 0 0 32px rgba(255,247,232,0.42)",
         padding: "30px 22px",
       }}
     >

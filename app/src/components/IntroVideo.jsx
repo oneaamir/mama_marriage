@@ -8,39 +8,52 @@ export default function IntroVideo({ src, poster, onComplete }) {
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
+    let finished = false;
+    let playingFired = false;
+
+    // Fire onComplete the moment the fade BEGINS (not after) so the hero text
+    // animates in while the video fade is still playing — no blank pause.
+    const finish = () => {
+      if (finished) return;
+      finished = true;
+      onComplete && onComplete();
+      setFading(true);
+      setTimeout(() => setHidden(true), 700);
+    };
 
     const tryPlay = async () => {
       try {
         v.muted = true;
         await v.play();
       } catch {
-        // Autoplay blocked: still show the final frame underneath and continue.
+        // Autoplay blocked: continue immediately.
         finish();
       }
     };
 
-    const finish = () => {
-      if (fading || hidden) return;
-      setFading(true);
-      setTimeout(() => {
-        setHidden(true);
-        onComplete && onComplete();
-      }, 1100);
-    };
-
     const onEnded = () => finish();
     const onErr = () => finish();
+    const onPlaying = () => {
+      playingFired = true;
+    };
 
     v.addEventListener("ended", onEnded);
     v.addEventListener("error", onErr);
+    v.addEventListener("playing", onPlaying);
     tryPlay();
 
-    // Hard fallback so guests never get stuck on a stalled video.
-    const safety = setTimeout(finish, 18000);
+    // If the first frame doesn't start playing within 4s, bail to the website.
+    const watchdog = setTimeout(() => {
+      if (!playingFired) finish();
+    }, 4000);
+    // Hard cap so the intro never holds the page longer than 9s total.
+    const safety = setTimeout(finish, 9000);
 
     return () => {
       v.removeEventListener("ended", onEnded);
       v.removeEventListener("error", onErr);
+      v.removeEventListener("playing", onPlaying);
+      clearTimeout(watchdog);
       clearTimeout(safety);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -49,17 +62,15 @@ export default function IntroVideo({ src, poster, onComplete }) {
   const skip = () => {
     if (fading) return;
     setFading(true);
-    setTimeout(() => {
-      setHidden(true);
-      onComplete && onComplete();
-    }, 700);
+    onComplete && onComplete();
+    setTimeout(() => setHidden(true), 500);
   };
 
   if (hidden) return null;
 
   return (
     <div
-      className="fixed inset-0 z-[60] bg-black transition-opacity duration-[1100ms] ease-out"
+      className="fixed inset-0 z-[60] bg-ivory transition-opacity duration-[700ms] ease-out"
       style={{ opacity: fading ? 0 : 1, pointerEvents: fading ? "none" : "auto" }}
       aria-hidden={fading}
     >
@@ -83,9 +94,9 @@ export default function IntroVideo({ src, poster, onComplete }) {
       <button
         type="button"
         onClick={skip}
-        className="absolute bottom-6 right-6 z-10 text-ivory/85 text-sm tracking-[0.2em] uppercase border border-ivory/40 px-3 py-1.5 rounded-full backdrop-blur-sm hover:text-ivory hover:border-ivory/70 transition"
+        className="absolute bottom-5 right-5 z-10 text-ivory/95 text-[11px] tracking-[0.32em] uppercase border border-ivory/55 bg-deepbrown/30 px-3.5 py-1.5 rounded-full backdrop-blur-sm hover:bg-deepbrown/45 hover:border-ivory/80 transition"
       >
-        Skip
+        Skip Intro
       </button>
     </div>
   );
