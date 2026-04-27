@@ -6,7 +6,7 @@ Keep the effect stack premium and controlled:
 
 ```text
 Core:
-1. Card expansion
+1. Cover card lift + paper panel reveal
 2. Gold foil shine
 3. Paper layer reveal
 4. Shadow depth
@@ -51,23 +51,22 @@ After video fades:
 
 No sudden pop.
 
-## Card Expansion Scroll
+## Cover Card And Paper Panel Scroll
 
 Use GSAP ScrollTrigger.
 
 Suggested behavior:
 
 ```text
-section pin starts
-card min-height: about 68vh
-scroll progress 0 -> 1
-card height grows to about 160vh or content height
-border opacity/sharpness increases
+hero section pin starts
+scroll progress 0 -> 0.25: card lifts up 8-14vh and tilts back 2-3deg
+scroll progress 0.25 -> 1: large paper panels slide up from behind the card
 background blur increases slightly
-content groups fade/slide in one by one
+gold border sharpness increases
+panels reveal one by one
 ```
 
-Content should emerge from inside the card:
+Content should emerge as large mobile-friendly paper panels:
 
 ```text
 Invitation message
@@ -77,7 +76,7 @@ Location actions
 RSVP
 ```
 
-The countdown should appear after the invitation message, not immediately at the top. It should feel like the card is revealing a special engraved time panel.
+The countdown should appear after the invitation message, not immediately at the top. It should feel like the card is revealing a special engraved time panel. Do not squeeze all content into one small card.
 
 ## Paper Layer Reveal
 
@@ -91,6 +90,20 @@ shadow grows slightly
 ```
 
 Some sections can slide from behind the main card edge, but keep motion slow.
+
+## Mobile Readability
+
+On phone, each revealed panel should have enough space:
+
+```text
+panel width: 88vw to 92vw
+panel min-height: 55vh to 75vh depending on content
+text uses readable sizes
+countdown uses 2x2 tile layout
+buttons have touch-friendly height
+```
+
+No section should require tiny text to fit.
 
 ## Countdown Animation
 

@@ -48,7 +48,7 @@ Rules:
 
 ## Card Style
 
-The main card should have:
+The hero card and revealed paper panels should have:
 
 - Ivory paper texture.
 - Thin antique gold border.
@@ -57,6 +57,13 @@ The main card should have:
 - Soft outer shadow.
 - Slight 3D thickness using pseudo-elements or layered shadows.
 - Gold foil shine across border only, not across the full card.
+
+Panel rules:
+
+- Hero card is the visual cover.
+- Later content uses large ivory paper panels, not one cramped long card.
+- Panels should look like matching invitation inserts from the same envelope.
+- Each panel can have slightly different height, but all should share the same gold border language.
 
 ## Alignment With Video Frame
 

@@ -29,8 +29,9 @@
 
 ## Scroll
 
-- [ ] Card expands on scroll.
-- [ ] Content emerges from inside card.
+- [ ] Hero card lifts/opens on scroll.
+- [ ] Large readable paper panels emerge from the card.
+- [ ] Content is not squeezed into one tiny mobile card.
 - [ ] Paper layers reveal smoothly.
 - [ ] No sudden section pop.
 - [ ] Animation is slow and controlled.

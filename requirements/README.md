@@ -72,5 +72,6 @@ Prefer a single-page app. Do not redirect after the video.
 - [animation-plan.md](./animation-plan.md)
 - [content-model.md](./content-model.md)
 - [claude-code-guide.md](./claude-code-guide.md)
+- [claude-build-prompt.md](./claude-build-prompt.md)
 - [acceptance-checklist.md](./acceptance-checklist.md)
 - [data/invitation-data.json](./data/invitation-data.json)

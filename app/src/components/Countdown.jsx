@@ -23,12 +23,10 @@ function pad(n, w = 2) {
 
 function Tile({ value, label, width = 2 }) {
   return (
-    <div className="relative">
-      <div className="jewel-tile border-glint flex flex-col items-center justify-center px-3 py-3 sm:py-4 min-w-[68px] sm:min-w-[88px]">
-        <DigitRoll value={value} width={width} />
-        <div className="mt-1 text-[10px] sm:text-[11px] tracking-[0.22em] text-deepgold/90 uppercase">
-          {label}
-        </div>
+    <div className="jewel-tile border-glint flex flex-col items-center justify-center px-3 py-4 sm:py-5 min-w-[78px] sm:min-w-[100px]">
+      <DigitRoll value={value} width={width} />
+      <div className="mt-1.5 text-[10.5px] sm:text-[11.5px] tracking-[0.22em] text-deepgold/95 uppercase">
+        {label}
       </div>
     </div>
   );
@@ -49,9 +47,9 @@ function DigitRoll({ value, width }) {
   }, [value, display]);
 
   return (
-    <div className="overflow-hidden h-[34px] sm:h-[44px] flex items-center">
+    <div className="overflow-hidden h-[40px] sm:h-[50px] flex items-center">
       <span
-        className="tabular gold-foil-stable text-[28px] sm:text-[36px] font-display font-semibold leading-none transition-all duration-[420ms] ease-out"
+        className="tabular gold-foil-stable text-[32px] sm:text-[40px] font-display font-semibold leading-none transition-all duration-[420ms] ease-out"
         style={{
           transform: rolling ? "translateY(-8px)" : "translateY(0)",
           opacity: rolling ? 0.2 : 1,
@@ -77,7 +75,11 @@ export default function Countdown({ targetISO, labels, lang, title }) {
   return (
     <div className="w-full">
       {title && (
-        <h3 className={`text-center text-[15px] sm:text-base tracking-[0.22em] uppercase text-deepgold/90 mb-4 ${lang === "hi" ? "font-hindi normal-case tracking-wider" : ""}`}>
+        <h3
+          className={`text-center text-[14px] sm:text-[16px] tracking-[0.22em] uppercase text-deepgold mb-5 ${
+            lang === "hi" ? "font-hindi normal-case tracking-wider" : "font-display"
+          }`}
+        >
           {title}
         </h3>
       )}

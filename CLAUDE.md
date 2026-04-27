@@ -10,8 +10,9 @@ This is not a normal landing page. It is a premium mobile-first wedding invitati
 intro video
 -> final card stays
 -> website takes over
--> card expands on scroll
--> details emerge from inside the card
+-> hero card lifts on scroll
+-> large paper panels emerge from the card
+-> details stay readable on mobile
 ```
 
 Use the date and time:
@@ -28,6 +29,7 @@ Use the date and time:
 - Smooth video fade into matching final-frame image.
 - Hero card with `Tausif & Talat`, `Aaghaz-e-Safar`, date, and time.
 - Scroll-based card expansion.
+- Use a mobile-friendly cover-card-to-paper-panels layout. Do not squeeze all content into one small card.
 - Paper layer reveal for invitation content.
 - Subtle gold foil shine.
 - Premium shadow depth.

@@ -19,6 +19,14 @@ This repo includes a root `CLAUDE.md` with instructions for the build. Keep it u
 
 ## Suggested Prompt To Give Claude Code
 
+Use the full paste-ready version in:
+
+```text
+requirements/claude-build-prompt.md
+```
+
+Short version:
+
 ```text
 Build the wedding invitation website described in requirements/.
 

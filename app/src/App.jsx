@@ -20,16 +20,33 @@ export default function App() {
     return () => m.removeEventListener?.("change", onChange);
   }, []);
 
-  // Update document title from JSON.
   useEffect(() => {
     if (data?.meta?.siteTitle) document.title = data.meta.siteTitle;
   }, []);
 
   return (
     <div className="relative min-h-screen text-deepbrown">
+      {/* Ambient backdrop: same final-frame, heavily blurred and dim, fixed
+          behind the whole page so panels float in the same wedding setting. */}
+      <div className="fixed inset-0 -z-10 bg-[#1a0f08]" aria-hidden>
+        <img
+          src={data.theme.assets.finalFrame}
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{ filter: "blur(22px) brightness(0.55) saturate(0.95)", transform: "scale(1.12)" }}
+          draggable={false}
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(ellipse at center, rgba(248,217,139,0.10) 0%, rgba(26,15,8,0.0) 35%, rgba(26,15,8,0.55) 90%)",
+          }}
+        />
+      </div>
+
       <LanguageToggle lang={lang} onToggle={toggle} />
 
-      {/* Light gold dust particles, edges only. Disabled when reduced motion. */}
       {introDone && !reduced && <Particles count={8} enabled />}
 
       <IntroVideo
@@ -38,13 +55,11 @@ export default function App() {
         onComplete={() => setIntroDone(true)}
       />
 
-      <main className="relative">
+      <main className="relative z-10">
         <InvitationCard data={data} lang={lang} ready={introDone} />
-        {/* small breathing space after the pinned section */}
-        <div className="h-[10vh]" aria-hidden />
       </main>
 
-      <footer className="relative z-10 text-center py-6 text-deepgold/70 text-[11px] tracking-[0.32em] uppercase bg-[#1a0f08]">
+      <footer className="relative z-10 text-center py-6 text-deepgold/75 text-[11px] tracking-[0.32em] uppercase">
         {lang === "hi" ? "हार्दिक धन्यवाद" : "With Love & Gratitude"}
       </footer>
     </div>
