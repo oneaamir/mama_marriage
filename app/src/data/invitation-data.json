@@ -1,0 +1,189 @@
+{
+  "meta": {
+    "siteTitle": "Tausif & Talat Wedding Invitation",
+    "defaultLanguage": "en",
+    "supportedLanguages": ["en", "hi"],
+    "timezone": "Asia/Kolkata"
+  },
+  "theme": {
+    "name": "Royal Ivory Gold",
+    "colors": {
+      "ivory": "#F4E8D0",
+      "pearl": "#FFF7E8",
+      "champagne": "#D8B46A",
+      "antiqueGold": "#B88A3B",
+      "deepGold": "#8A6428",
+      "deepBrown": "#3A2414",
+      "maroonSeal": "#5A1F16",
+      "softGlow": "#F8D98B"
+    },
+    "assets": {
+      "introVideo": "https://res.cloudinary.com/dim7qn23t/video/upload/v1777325159/Video_Generation_with_Text_Addition_ir9bei.mp4",
+      "finalFrame": "https://res.cloudinary.com/dim7qn23t/image/upload/v1777325204/55536cc6-5401-43a6-b1a6-e78140945cee.png",
+      "silkTexture": "/assets/silk-texture.jpg",
+      "music": "/assets/music.mp3"
+    }
+  },
+  "couple": {
+    "groom": {
+      "en": "Tausif",
+      "hi": "तौसीफ"
+    },
+    "bride": {
+      "en": "Talat",
+      "hi": "तलत"
+    },
+    "displayName": {
+      "en": "Tausif & Talat",
+      "hi": "तौसीफ और तलत"
+    },
+    "tagline": {
+      "en": "Aaghaz-e-Safar",
+      "hi": "आग़ाज़-ए-सफ़र"
+    }
+  },
+  "event": {
+    "type": {
+      "en": "Wedding Ceremony",
+      "hi": "शादी समारोह"
+    },
+    "dateISO": "2026-05-09",
+    "time24h": "18:30",
+    "dateTimeISO": "2026-05-09T18:30:00+05:30",
+    "displayDate": {
+      "en": "9th May 2026",
+      "hi": "9 मई 2026"
+    },
+    "displayTime": {
+      "en": "6:30 PM",
+      "hi": "शाम 6:30 बजे"
+    }
+  },
+  "families": {
+    "hostLine": {
+      "en": "With the blessings of our families",
+      "hi": "हमारे परिवारों के आशीर्वाद से"
+    },
+    "invitationLine": {
+      "en": "We request the honor of your presence to celebrate this beautiful beginning.",
+      "hi": "इस खूबसूरत शुरुआत का जश्न मनाने के लिए आपकी उपस्थिति हमारे लिए सम्मान की बात होगी।"
+    },
+    "hosts": []
+  },
+  "venue": {
+    "name": {
+      "en": "Venue Name",
+      "hi": "वेन्यू का नाम"
+    },
+    "address": {
+      "en": "Full venue address will be added here.",
+      "hi": "पूरा वेन्यू पता यहां जोड़ा जाएगा।"
+    },
+    "mapUrl": "",
+    "city": {
+      "en": "",
+      "hi": ""
+    }
+  },
+  "actions": {
+    "whatsappNumber": "",
+    "phoneNumber": "",
+    "rsvpMessage": {
+      "en": "Assalamualaikum, I will attend the wedding of Tausif & Talat on 9th May 2026.",
+      "hi": "अस्सलामुअलैकुम, मैं 9 मई 2026 को तौसीफ और तलत की शादी में शामिल होऊंगा/होऊंगी।"
+    },
+    "calendarTitle": {
+      "en": "Tausif & Talat Wedding",
+      "hi": "तौसीफ और तलत की शादी"
+    }
+  },
+  "gallery": {
+    "enabled": false,
+    "images": []
+  },
+  "sections": {
+    "hero": {
+      "scrollHint": {
+        "en": "Scroll",
+        "hi": "नीचे देखें"
+      }
+    },
+    "countdown": {
+      "variant": "royal-time-jewels",
+      "motion": {
+        "digitChange": "soft-roll",
+        "shine": "subtle-border-glint",
+        "layoutMobile": "2x2",
+        "layoutDesktop": "4x1"
+      },
+      "title": {
+        "en": "Counting down to the celebration",
+        "hi": "खुशियों के दिन का इंतज़ार"
+      },
+      "labels": {
+        "days": {
+          "en": "Days",
+          "hi": "दिन"
+        },
+        "hours": {
+          "en": "Hours",
+          "hi": "घंटे"
+        },
+        "minutes": {
+          "en": "Minutes",
+          "hi": "मिनट"
+        },
+        "seconds": {
+          "en": "Seconds",
+          "hi": "सेकंड"
+        }
+      }
+    },
+    "details": {
+      "title": {
+        "en": "Wedding Details",
+        "hi": "शादी की जानकारी"
+      },
+      "dateLabel": {
+        "en": "Date",
+        "hi": "तारीख"
+      },
+      "timeLabel": {
+        "en": "Time",
+        "hi": "समय"
+      },
+      "venueLabel": {
+        "en": "Venue",
+        "hi": "स्थान"
+      }
+    },
+    "location": {
+      "title": {
+        "en": "Venue & RSVP",
+        "hi": "वेन्यू और RSVP"
+      },
+      "openMap": {
+        "en": "Open Location",
+        "hi": "लोकेशन खोलें"
+      },
+      "addCalendar": {
+        "en": "Add to Calendar",
+        "hi": "कैलेंडर में जोड़ें"
+      },
+      "call": {
+        "en": "Call",
+        "hi": "कॉल करें"
+      },
+      "whatsapp": {
+        "en": "WhatsApp RSVP",
+        "hi": "WhatsApp RSVP"
+      }
+    },
+    "closing": {
+      "message": {
+        "en": "Your presence will make our celebration complete.",
+        "hi": "आपकी उपस्थिति हमारे उत्सव को पूर्ण बनाएगी।"
+      }
+    }
+  }
+}
