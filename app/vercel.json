@@ -1,8 +1,19 @@
 {
   "rewrites": [
     {
-      "source": "/(.*)",
+      "source": "/barat",
       "destination": "/index.html"
+    },
+    {
+      "source": "/walima",
+      "destination": "/index.html"
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/barat",
+      "permanent": false
     }
   ]
 }
