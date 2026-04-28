@@ -74,12 +74,15 @@ export default function IntroVideo({ src, poster, onComplete }) {
       style={{ opacity: fading ? 0 : 1, pointerEvents: fading ? "none" : "auto" }}
       aria-hidden={fading}
     >
-      {/* Final frame sits underneath so the fade lands on a matching image. */}
+      {/* Final frame sits underneath so the fade lands on a matching image.
+          Decoded async + fetched at high priority — first thing the user sees. */}
       <img
         src={poster}
         alt=""
         className="absolute inset-0 w-full h-full object-cover"
         draggable={false}
+        decoding="async"
+        fetchpriority="high"
       />
       <video
         ref={videoRef}
@@ -88,7 +91,7 @@ export default function IntroVideo({ src, poster, onComplete }) {
         autoPlay
         muted
         playsInline
-        preload="auto"
+        preload="metadata"
         className="absolute inset-0 w-full h-full object-cover"
       />
       <button

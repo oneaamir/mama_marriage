@@ -74,8 +74,7 @@ export default function Particles({ count = 8, enabled = true }) {
   return (
     <canvas
       ref={ref}
-      className="pointer-events-none fixed inset-0 z-[5]"
-      style={{ width: "100vw", height: "100vh" }}
+      className="pointer-events-none absolute inset-0 z-[6] w-full h-full"
       aria-hidden
     />
   );

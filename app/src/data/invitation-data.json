@@ -1,6 +1,6 @@
 {
   "meta": {
-    "siteTitle": "Tausif & Talat Wedding Invitation",
+    "siteTitle": "Tausif & Talat — Aaghaz-e-Safar",
     "defaultLanguage": "en",
     "supportedLanguages": ["en", "hi"],
     "timezone": "Asia/Kolkata"
@@ -25,65 +25,120 @@
     }
   },
   "couple": {
-    "groom": {
-      "en": "Tausif",
-      "hi": "तौसीफ"
-    },
-    "bride": {
-      "en": "Talat",
-      "hi": "तलत"
-    },
+    "groom": { "en": "Tausif", "hi": "तौसीफ" },
+    "bride": { "en": "Talat", "hi": "तलत" },
     "displayName": {
-      "en": "Tausif & Talat",
-      "hi": "तौसीफ और तलत"
+      "en": "Tausif ♥ Talat",
+      "hi": "तौसीफ ♥ तलत"
     },
     "tagline": {
       "en": "Aaghaz-e-Safar",
       "hi": "आग़ाज़-ए-सफ़र"
+    },
+    "groomDetails": {
+      "fullName": { "en": "Tausif Ansari", "hi": "तौसीफ अंसारी" },
+      "father":   { "en": "Haji Kalimul Hussain", "hi": "हाजी कलीमुल हुसैन" },
+      "address":  { "en": "Mayapur, Khalari, McCluskiegunj", "hi": "मायापुर, खलारी, मैकक्लुस्कीगंज" }
+    },
+    "brideDetails": {
+      "fullName": { "en": "Talat Nigar", "hi": "तलत निगार" },
+      "father":   { "en": "Taslim Ansari", "hi": "तस्लीम अंसारी" },
+      "address":  { "en": "Sonchipi, Mandar", "hi": "सोंचीपी, मंडार" },
+      "ps":       { "en": "Chanho", "hi": "चान्हो" },
+      "po":       { "en": "Sosai",  "hi": "सोसई" }
     }
   },
   "event": {
-    "type": {
-      "en": "Wedding Ceremony",
-      "hi": "शादी समारोह"
-    },
+    "type": { "en": "Wedding Ceremony", "hi": "शादी समारोह" },
     "dateISO": "2026-05-09",
     "time24h": "18:30",
     "dateTimeISO": "2026-05-09T18:30:00+05:30",
-    "displayDate": {
-      "en": "9th May 2026",
-      "hi": "9 मई 2026"
+    "displayDate": { "en": "9th May 2026", "hi": "9 मई 2026" },
+    "displayTime": { "en": "6:30 PM", "hi": "शाम 6:30 बजे" }
+  },
+  "programme": [
+    {
+      "id": "milad",
+      "accent": "spiritual",
+      "routes": ["barat", "walima"],
+      "day":  { "en": "Day 1", "hi": "दिन 1" },
+      "name": { "en": "Milad Qurankhani", "hi": "मिलाद क़ुरानख़्वानी" },
+      "displayDate": { "en": "8th May 2026 (Friday)", "hi": "8 मई 2026 (शुक्रवार)" },
+      "displayTime": { "en": "8:00 AM", "hi": "सुबह 8:00 बजे" },
+      "dateTimeISO": "2026-05-08T08:00:00+05:30"
     },
-    "displayTime": {
-      "en": "6:30 PM",
-      "hi": "शाम 6:30 बजे"
+    {
+      "id": "haldi",
+      "accent": "haldi",
+      "routes": ["barat", "walima"],
+      "day":  { "en": "Day 1", "hi": "दिन 1" },
+      "name": { "en": "Rashma-e-Haldi", "hi": "रस्म-ए-हल्दी" },
+      "displayDate": { "en": "8th May 2026 (Friday)", "hi": "8 मई 2026 (शुक्रवार)" },
+      "displayTime": { "en": "2:00 PM", "hi": "दोपहर 2:00 बजे" },
+      "dateTimeISO": "2026-05-08T14:00:00+05:30"
+    },
+    {
+      "id": "wedding",
+      "accent": "wedding",
+      "routes": ["barat"],
+      "day":  { "en": "Day 2", "hi": "दिन 2" },
+      "name": { "en": "Wedding Ceremony", "hi": "शादी समारोह" },
+      "displayDate": { "en": "9th May 2026 (Saturday)", "hi": "9 मई 2026 (शनिवार)" },
+      "displayTime": { "en": "6:30 PM", "hi": "शाम 6:30 बजे" },
+      "dateTimeISO": "2026-05-09T18:30:00+05:30"
+    },
+    {
+      "id": "walima",
+      "accent": "walima",
+      "routes": ["barat", "walima"],
+      "day":  { "en": "Reception", "hi": "रिसेप्शन" },
+      "name": { "en": "Walima", "hi": "वलीमा" },
+      "displayDate": { "en": "11th May 2026 (Monday)", "hi": "11 मई 2026 (सोमवार)" },
+      "displayTime": { "en": "7:00 PM", "hi": "शाम 7:00 बजे" },
+      "dateTimeISO": "2026-05-11T19:00:00+05:30"
+    }
+  ],
+  "routes": {
+    "barat": {
+      "label": { "en": "Barat Invitation", "hi": "बारात निमंत्रण" },
+      "switchLabel": { "en": "Barat", "hi": "बारात" },
+      "countdownEventId": "wedding",
+      "countdownSubtitle": {
+        "en": "Until the Barat ceremony",
+        "hi": "बारात समारोह तक"
+      }
+    },
+    "walima": {
+      "label": { "en": "Walima Invitation", "hi": "वलीमा निमंत्रण" },
+      "switchLabel": { "en": "Walima", "hi": "वलीमा" },
+      "countdownEventId": "walima",
+      "countdownSubtitle": {
+        "en": "Until the Walima reception",
+        "hi": "वलीमा रिसेप्शन तक"
+      }
     }
   },
   "families": {
+    "religiousHeader": {
+      "en": "Bismillahir Rahmanir Rahim",
+      "hi": "बिस्मिल्लाहिर्रहमानिर्रहीम"
+    },
     "hostLine": {
       "en": "With the blessings of our families",
       "hi": "हमारे परिवारों के आशीर्वाद से"
     },
     "invitationLine": {
-      "en": "We request the honor of your presence to celebrate this beautiful beginning.",
-      "hi": "इस खूबसूरत शुरुआत का जश्न मनाने के लिए आपकी उपस्थिति हमारे लिए सम्मान की बात होगी।"
+      "en": "Haji Kalimul Hussain warmly invites you with delight, to the wedding of his son Tausif Ansari.",
+      "hi": "हाजी कलीमुल हुसैन आप सभी को अपने पुत्र तौसीफ अंसारी की शादी में सादर आमंत्रित करते हैं।"
     },
     "hosts": []
   },
   "venue": {
-    "name": {
-      "en": "Venue Name",
-      "hi": "वेन्यू का नाम"
-    },
-    "address": {
-      "en": "Full venue address will be added here.",
-      "hi": "पूरा वेन्यू पता यहां जोड़ा जाएगा।"
-    },
-    "mapUrl": "",
-    "city": {
-      "en": "",
-      "hi": ""
-    }
+    "name":    { "en": "Marriage Hall, Dakra", "hi": "मैरिज हॉल, दकरा" },
+    "nearby":  { "en": "Near Durga Mandap, Dakra", "hi": "दुर्गा मंडप के पास, दकरा" },
+    "address": { "en": "Dakra", "hi": "दकरा" },
+    "mapUrl":  "https://maps.app.goo.gl/P5zg7Mk7DEiG1xQW6",
+    "city":    { "en": "", "hi": "" }
   },
   "actions": {
     "whatsappNumber": "",
@@ -93,20 +148,15 @@
       "hi": "अस्सलामुअलैकुम, मैं 9 मई 2026 को तौसीफ और तलत की शादी में शामिल होऊंगा/होऊंगी।"
     },
     "calendarTitle": {
-      "en": "Tausif & Talat Wedding",
-      "hi": "तौसीफ और तलत की शादी"
+      "en": "Tausif & Talat — Wedding (Aaghaz-e-Safar)",
+      "hi": "तौसीफ और तलत की शादी (आग़ाज़-ए-सफ़र)"
     }
   },
-  "gallery": {
-    "enabled": false,
-    "images": []
-  },
+  "gallery": { "enabled": false, "images": [] },
   "sections": {
     "hero": {
-      "scrollHint": {
-        "en": "Scroll",
-        "hi": "नीचे देखें"
-      }
+      "scrollHint": { "en": "Scroll", "hi": "नीचे देखें" },
+      "discover":   { "en": "Discover the celebration", "hi": "उत्सव की झलक देखें" }
     },
     "countdown": {
       "variant": "royal-time-jewels",
@@ -117,72 +167,61 @@
         "layoutDesktop": "4x1"
       },
       "title": {
-        "en": "Counting down to the celebration",
-        "hi": "खुशियों के दिन का इंतज़ार"
+        "en": "Celebration Begins In",
+        "hi": "उत्सव शुरू होने में"
+      },
+      "subtitle": {
+        "en": "Until the wedding ceremony",
+        "hi": "शादी समारोह तक"
       },
       "labels": {
-        "days": {
-          "en": "Days",
-          "hi": "दिन"
-        },
-        "hours": {
-          "en": "Hours",
-          "hi": "घंटे"
-        },
-        "minutes": {
-          "en": "Minutes",
-          "hi": "मिनट"
-        },
-        "seconds": {
-          "en": "Seconds",
-          "hi": "सेकंड"
-        }
+        "days":    { "en": "Days",    "hi": "दिन" },
+        "hours":   { "en": "Hours",   "hi": "घंटे" },
+        "minutes": { "en": "Minutes", "hi": "मिनट" },
+        "seconds": { "en": "Seconds", "hi": "सेकंड" }
       }
     },
-    "details": {
-      "title": {
-        "en": "Wedding Details",
-        "hi": "शादी की जानकारी"
-      },
-      "dateLabel": {
-        "en": "Date",
-        "hi": "तारीख"
-      },
-      "timeLabel": {
-        "en": "Time",
-        "hi": "समय"
-      },
-      "venueLabel": {
-        "en": "Venue",
-        "hi": "स्थान"
-      }
+    "programme": {
+      "eyebrow": { "en": "The Celebrations", "hi": "उत्सव" },
+      "title":   { "en": "Wedding Programme", "hi": "शादी का कार्यक्रम" }
     },
-    "location": {
-      "title": {
-        "en": "Venue & RSVP",
-        "hi": "वेन्यू और RSVP"
-      },
-      "openMap": {
-        "en": "Open Location",
-        "hi": "लोकेशन खोलें"
-      },
-      "addCalendar": {
-        "en": "Add to Calendar",
-        "hi": "कैलेंडर में जोड़ें"
-      },
-      "call": {
-        "en": "Call",
-        "hi": "कॉल करें"
-      },
-      "whatsapp": {
-        "en": "WhatsApp RSVP",
-        "hi": "WhatsApp RSVP"
-      }
+    "venue": {
+      "eyebrow":     { "en": "The Venue",     "hi": "स्थान" },
+      "title":       { "en": "Venue",         "hi": "स्थान" },
+      "openMap":     { "en": "Open in Maps",  "hi": "मैप्स में खोलें" },
+      "addCalendar": { "en": "Add to Calendar","hi": "कैलेंडर में जोड़ें" }
+    },
+    "couple": {
+      "eyebrow":      { "en": "The Bride & Groom", "hi": "वर एवं वधू" },
+      "title":        { "en": "Tausif & Talat", "hi": "तौसीफ एवं तलत" },
+      "groomLabel":   { "en": "Groom", "hi": "वर" },
+      "brideLabel":   { "en": "Bride", "hi": "वधू" },
+      "fatherOf":     { "en": "Son of",      "hi": "पुत्र" },
+      "daughterOf":   { "en": "Daughter of", "hi": "पुत्री" },
+      "addressLabel": { "en": "Address", "hi": "पता" },
+      "psLabel":      { "en": "PS", "hi": "थाना" },
+      "poLabel":      { "en": "PO", "hi": "डाकघर" },
+      "weds":         { "en": "Weds", "hi": "विवाह" }
+    },
+    "rsvp": {
+      "eyebrow":  { "en": "RSVP", "hi": "RSVP" },
+      "call":     { "en": "Call", "hi": "कॉल करें" },
+      "whatsapp": { "en": "WhatsApp RSVP", "hi": "WhatsApp RSVP" }
     },
     "closing": {
+      "eyebrow": {
+        "en": "With Gratitude",
+        "hi": "हार्दिक धन्यवाद"
+      },
       "message": {
         "en": "Your presence will make our celebration complete.",
         "hi": "आपकी उपस्थिति हमारे उत्सव को पूर्ण बनाएगी।"
+      }
+    },
+    "footer": {
+      "message": {
+        "en": "With Love & Gratitude",
+        "hi": "हार्दिक धन्यवाद"
       }
     }
   }

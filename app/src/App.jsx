@@ -1,13 +1,18 @@
-import { useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import data from "./data/invitation-data.json";
 import IntroVideo from "./components/IntroVideo";
 import InvitationCard from "./components/InvitationCard";
 import LanguageToggle from "./components/LanguageToggle";
-import Particles from "./components/Particles";
-import { useLanguage } from "./lib/i18n";
+import { useLanguage, t } from "./lib/i18n";
+import { useRoute } from "./lib/routing";
+
+// Decorative layers — lazy-loaded as separate chunks so they're not in the
+// initial JS payload. They only render after the intro video completes.
+const SilkWaves = lazy(() => import("./components/SilkWaves"));
 
 export default function App() {
   const { lang, toggle } = useLanguage(data.meta.defaultLanguage || "en");
+  const { route, navigate } = useRoute();
   const [introDone, setIntroDone] = useState(false);
   const [reduced, setReduced] = useState(false);
 
@@ -41,6 +46,9 @@ export default function App() {
             willChange: "transform",
           }}
           draggable={false}
+          loading="lazy"
+          decoding="async"
+          fetchpriority="low"
         />
         {/* Light warm ivory tint — keeps the photo clearly visible but warms
             the whole page so dark frame areas don't read as flat brown. */}
@@ -68,7 +76,11 @@ export default function App() {
 
       <LanguageToggle lang={lang} onToggle={toggle} />
 
-      {introDone && !reduced && <Particles count={6} enabled />}
+      {introDone && !reduced && (
+        <Suspense fallback={null}>
+          <SilkWaves enabled />
+        </Suspense>
+      )}
 
       <IntroVideo
         src={data.theme.assets.introVideo}
@@ -77,11 +89,41 @@ export default function App() {
       />
 
       <main className="relative z-10">
-        <InvitationCard data={data} lang={lang} ready={introDone} />
+        <InvitationCard data={data} lang={lang} route={route} ready={introDone} />
       </main>
 
-      <footer className="relative z-10 text-center py-7 text-deepbrown/80 text-[11px] tracking-[0.32em] uppercase">
-        {lang === "hi" ? "हार्दिक धन्यवाद" : "With Love & Gratitude"}
+      <footer
+        className={`relative z-10 text-center py-7 ${
+          lang === "hi" ? "font-hindi" : "font-display"
+        }`}
+      >
+        {/* Subtle invitation switch — only renders if both routes are configured. */}
+        {data.routes && (
+          <div className="flex items-center justify-center gap-3 mb-3 text-[11px] tracking-[0.32em] uppercase">
+            {Object.entries(data.routes).map(([k, v], i, arr) => (
+              <span key={k} className="contents">
+                <button
+                  type="button"
+                  onClick={() => navigate(k)}
+                  className={`transition-colors ${
+                    route === k
+                      ? "text-deepgold font-semibold"
+                      : "text-deepbrown/60 hover:text-deepbrown"
+                  }`}
+                  aria-current={route === k ? "page" : undefined}
+                >
+                  {t(v.switchLabel, lang)}
+                </button>
+                {i < arr.length - 1 && (
+                  <span aria-hidden className="block w-1 h-1 rounded-full bg-antiquegold/55" />
+                )}
+              </span>
+            ))}
+          </div>
+        )}
+        <div className="text-deepbrown/80 text-[11px] tracking-[0.32em] uppercase">
+          {t(data.sections.footer?.message, lang)}
+        </div>
       </footer>
     </div>
   );

@@ -23,9 +23,9 @@ function pad(n, w = 2) {
 
 function Tile({ value, label, width = 2 }) {
   return (
-    <div className="jewel-tile border-glint rim-light-soft relative flex flex-col items-center justify-center px-3 py-4 sm:py-5 min-w-[78px] sm:min-w-[100px]">
+    <div className="jewel-tile border-glint rim-light-soft relative flex flex-col items-center justify-center px-3 py-4 sm:py-5 min-w-[82px] sm:min-w-[110px]">
       <DigitRoll value={value} width={width} />
-      <div className="mt-1.5 text-[10.5px] sm:text-[11.5px] tracking-[0.22em] text-deepgold/95 uppercase">
+      <div className="mt-2 text-[11px] sm:text-[12.5px] tracking-[0.18em] text-deepgold uppercase font-display font-semibold">
         {label}
       </div>
     </div>
@@ -47,14 +47,14 @@ function DigitRoll({ value, width }) {
   }, [value, display]);
 
   return (
-    <div className="overflow-hidden h-[40px] sm:h-[50px] flex items-center">
+    <div className="overflow-hidden h-[44px] sm:h-[56px] flex items-center">
       <span
-        className="tabular text-deepbrown text-[32px] sm:text-[40px] font-display font-semibold leading-none transition-all duration-[420ms] ease-out"
+        className="tabular text-deepbrown text-[36px] sm:text-[46px] font-display font-semibold leading-none transition-all duration-[360ms] ease-out"
         style={{
-          transform: rolling ? "translateY(-8px)" : "translateY(0)",
-          opacity: rolling ? 0.2 : 1,
-          filter: rolling ? "blur(2px)" : "blur(0)",
-          letterSpacing: "0.04em",
+          transform: rolling ? "translateY(-6px)" : "translateY(0)",
+          opacity: rolling ? 0.55 : 1,
+          filter: rolling ? "blur(0.6px)" : "blur(0)",
+          letterSpacing: "0.03em",
           textShadow: "0 1px 0 rgba(255,247,232,0.85), 0 -1px 0 rgba(184,138,59,0.25)",
         }}
       >
@@ -64,7 +64,7 @@ function DigitRoll({ value, width }) {
   );
 }
 
-export default function Countdown({ targetISO, labels, lang, title }) {
+export default function Countdown({ targetISO, labels, lang, title, subtitle }) {
   const targetMs = new Date(targetISO).getTime();
   const [parts, setParts] = useState(() => diffParts(targetMs));
 
@@ -73,16 +73,28 @@ export default function Countdown({ targetISO, labels, lang, title }) {
     return () => clearInterval(id);
   }, [targetMs]);
 
+  const langClass = lang === "hi" ? "font-hindi" : "font-display";
+
   return (
     <div className="w-full">
       {title && (
-        <h3
-          className={`text-center text-[14px] sm:text-[16px] tracking-[0.22em] uppercase text-deepgold mb-5 ${
-            lang === "hi" ? "font-hindi normal-case tracking-wider" : "font-display"
-          }`}
-        >
-          {title}
-        </h3>
+        <>
+          <h3
+            className={`text-center text-[16px] sm:text-[18px] tracking-[0.18em] uppercase text-deepgold mb-1.5 ${
+              lang === "hi" ? "font-hindi normal-case tracking-wider" : "font-display font-semibold"
+            }`}
+          >
+            {title}
+          </h3>
+          {subtitle && (
+            <p
+              className={`${langClass} text-center text-deepbrown/75 text-[12.5px] sm:text-[13.5px] italic mb-3`}
+            >
+              {subtitle}
+            </p>
+          )}
+          <div className="mx-auto w-14 h-[1px] bg-antiquegold/55 mb-6" />
+        </>
       )}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 max-w-md mx-auto">
         <Tile value={parts.days} label={t(labels.days, lang)} width={3} />
