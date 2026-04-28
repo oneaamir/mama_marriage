@@ -223,6 +223,20 @@
         "en": "With Love & Gratitude",
         "hi": "हार्दिक धन्यवाद"
       }
+    },
+    "invalid": {
+      "eyebrow": {
+        "en": "Private Invitation",
+        "hi": "निजी निमंत्रण"
+      },
+      "title": {
+        "en": "This Invitation Link Is Not Valid",
+        "hi": "यह निमंत्रण लिंक मान्य नहीं है"
+      },
+      "message": {
+        "en": "Please open the personal invitation link shared with you.",
+        "hi": "कृपया आपके साथ साझा किया गया व्यक्तिगत निमंत्रण लिंक खोलें।"
+      }
     }
   }
 }

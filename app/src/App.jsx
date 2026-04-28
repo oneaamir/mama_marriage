@@ -2,6 +2,7 @@ import { lazy, Suspense, useEffect, useState } from "react";
 import data from "./data/invitation-data.json";
 import IntroVideo from "./components/IntroVideo";
 import InvitationCard from "./components/InvitationCard";
+import InvalidLink from "./components/InvalidLink";
 import LanguageToggle from "./components/LanguageToggle";
 import { useLanguage, t } from "./lib/i18n";
 import { useRoute } from "./lib/routing";
@@ -12,7 +13,7 @@ const SilkWaves = lazy(() => import("./components/SilkWaves"));
 
 export default function App() {
   const { lang, toggle } = useLanguage(data.meta.defaultLanguage || "en");
-  const { route, navigate } = useRoute();
+  const { route } = useRoute();
   const [introDone, setIntroDone] = useState(false);
   const [reduced, setReduced] = useState(false);
 
@@ -29,12 +30,20 @@ export default function App() {
     if (data?.meta?.siteTitle) document.title = data.meta.siteTitle;
   }, []);
 
+  // Invalid path (anything other than /barat or /walima) → minimal page only.
+  // No video, no silk, no particles, no invitation, no footer switch.
+  if (!route) {
+    return (
+      <div className="relative min-h-screen text-deepbrown">
+        <LanguageToggle lang={lang} onToggle={toggle} />
+        <InvalidLink data={data} lang={lang} />
+      </div>
+    );
+  }
+
   return (
     <div className="relative min-h-screen text-deepbrown">
-      {/* Ambient backdrop: the final-frame is the page background everywhere.
-          The photo stays visible (light blur + light warm tint) so the page
-          continues from the video's final frame on every section — never a
-          flat solid color, never darkened. */}
+      {/* Ambient backdrop: the final-frame is the page background everywhere. */}
       <div className="fixed inset-0 z-0 bg-ivory" aria-hidden>
         <img
           src={data.theme.assets.finalFrame}
@@ -50,13 +59,10 @@ export default function App() {
           decoding="async"
           fetchpriority="low"
         />
-        {/* Light warm ivory tint — keeps the photo clearly visible but warms
-            the whole page so dark frame areas don't read as flat brown. */}
         <div
           className="absolute inset-0"
           style={{ backgroundColor: "rgba(244,232,208,0.22)" }}
         />
-        {/* Soft gold radial glow at center for premium depth. */}
         <div
           className="absolute inset-0"
           style={{
@@ -64,7 +70,6 @@ export default function App() {
               "radial-gradient(ellipse at 50% 40%, rgba(248,217,139,0.18) 0%, rgba(248,217,139,0.06) 40%, transparent 75%)",
           }}
         />
-        {/* Very subtle warm vertical gradient — gold at bottom, no dark. */}
         <div
           className="absolute inset-0"
           style={{
@@ -97,30 +102,6 @@ export default function App() {
           lang === "hi" ? "font-hindi" : "font-display"
         }`}
       >
-        {/* Subtle invitation switch — only renders if both routes are configured. */}
-        {data.routes && (
-          <div className="flex items-center justify-center gap-3 mb-3 text-[11px] tracking-[0.32em] uppercase">
-            {Object.entries(data.routes).map(([k, v], i, arr) => (
-              <span key={k} className="contents">
-                <button
-                  type="button"
-                  onClick={() => navigate(k)}
-                  className={`transition-colors ${
-                    route === k
-                      ? "text-deepgold font-semibold"
-                      : "text-deepbrown/60 hover:text-deepbrown"
-                  }`}
-                  aria-current={route === k ? "page" : undefined}
-                >
-                  {t(v.switchLabel, lang)}
-                </button>
-                {i < arr.length - 1 && (
-                  <span aria-hidden className="block w-1 h-1 rounded-full bg-antiquegold/55" />
-                )}
-              </span>
-            ))}
-          </div>
-        )}
         <div className="text-deepbrown/80 text-[11px] tracking-[0.32em] uppercase">
           {t(data.sections.footer?.message, lang)}
         </div>
