@@ -32,18 +32,21 @@ export default function App() {
     if (data?.meta?.siteTitle) document.title = data.meta.siteTitle;
   }, []);
 
-  // Hint scroll: after entrance animations settle, ease down ~120px so the guest
-  // 3 scroll hints after video ends: each nudges the page down progressively,
-  // pausing between pulses so the guest clearly feels "scroll down".
-  // Any interaction cancels the sequence immediately.
-  // Listeners are registered only when active — prevents music-player's
-  // first-touch from killing the hints before they start.
+  // Nudge-and-bounce scroll hint: after the hero entrance settles, the page
+  // dips down gently then floats back up — like the invitation is breathing.
+  // Repeats once after a pause, then rests. Cancels on any interaction.
+  // Stop listeners register only when the animation is live so the music
+  // player's first-touch cannot kill it before it starts.
   useEffect(() => {
     if (!introDone || reduced) return;
 
     let raf;
     let pauseTimer;
     let cancelled = false;
+
+    const scroller  = () => document.scrollingElement || document.documentElement;
+    const easeOut   = p => 1 - Math.pow(1 - p, 3);          // glide down
+    const easeInOut = p => -(Math.cos(Math.PI * p) - 1) / 2; // float back
 
     function cancel() {
       if (cancelled) return;
@@ -56,37 +59,40 @@ export default function App() {
       window.removeEventListener("keydown",     cancel);
     }
 
-    // Three progressive targets: each pulse scrolls deeper.
-    const HINTS = [110, 240, 380];
-
-    // document.scrollingElement is the spec-correct scroll container (works on
-    // all browsers including iOS Safari when overflow-x is set on body/#root).
-    const scroller = () => document.scrollingElement || document.documentElement;
-
-    function runHint(index) {
-      if (cancelled || index >= HINTS.length) { cancel(); return; }
-      const from = scroller().scrollTop;
-      const to   = HINTS[index];
-      const t0   = performance.now();
+    function animate(from, to, duration, easeFn, onDone) {
+      const t0 = performance.now();
       function tick(now) {
         if (cancelled) return;
-        const p = Math.min(1, (now - t0) / 1500);
-        scroller().scrollTop = from + (to - from) * (1 - Math.pow(1 - p, 3));
+        const p = Math.min(1, (now - t0) / duration);
+        scroller().scrollTop = from + (to - from) * easeFn(p);
         if (p < 1) raf = requestAnimationFrame(tick);
-        else pauseTimer = setTimeout(() => runHint(index + 1), 750);
+        else onDone?.();
       }
       raf = requestAnimationFrame(tick);
     }
 
+    // n=0: first cycle; n=1: second (final) cycle.
+    function runCycle(n) {
+      if (cancelled) return;
+      const nudgeTo  = n === 0 ? 52 : 60;
+      const returnTo = n === 0 ? 18 : 24;
+      animate(scroller().scrollTop, nudgeTo, 650, easeOut, () => {
+        animate(nudgeTo, returnTo, 500, easeInOut, () => {
+          if (n === 0) pauseTimer = setTimeout(() => runCycle(1), 1500);
+          else cancel();
+        });
+      });
+    }
+
     const startTimer = setTimeout(() => {
-      if (scroller().scrollTop > 10) return; // guest already scrolled
+      if (scroller().scrollTop > 10) return; // guest already scrolled — leave them alone
 
       window.addEventListener("wheel",       cancel, { once: true, passive: true });
       window.addEventListener("touchstart",  cancel, { once: true, passive: true });
       window.addEventListener("pointerdown", cancel, { once: true, passive: true });
       window.addEventListener("keydown",     cancel, { once: true });
 
-      runHint(0);
+      runCycle(0);
     }, 1400);
 
     return () => {
