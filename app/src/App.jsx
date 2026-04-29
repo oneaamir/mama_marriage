@@ -4,6 +4,7 @@ import IntroVideo from "./components/IntroVideo";
 import InvitationCard from "./components/InvitationCard";
 import InvalidLink from "./components/InvalidLink";
 import LanguageToggle from "./components/LanguageToggle";
+import MusicPlayer from "./components/MusicPlayer";
 import { useLanguage, t } from "./lib/i18n";
 import { useRoute } from "./lib/routing";
 
@@ -80,6 +81,7 @@ export default function App() {
       </div>
 
       <LanguageToggle lang={lang} onToggle={toggle} />
+      <MusicPlayer src={data.theme.assets.music} />
 
       {introDone && !reduced && (
         <Suspense fallback={null}>
