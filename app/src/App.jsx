@@ -33,6 +33,8 @@ export default function App() {
   }, []);
 
   // Auto-scroll: drifts slowly after hero settles; any manual interaction stops it.
+  // Stop listeners are registered only when the scroll is actually active — this
+  // prevents the music-player's first-interaction touch/click from killing it early.
   useEffect(() => {
     if (!introDone || reduced) return;
 
@@ -49,12 +51,16 @@ export default function App() {
       window.removeEventListener("keydown",     stop);
     }
 
-    window.addEventListener("wheel",       stop, { once: true, passive: true });
-    window.addEventListener("touchstart",  stop, { once: true, passive: true });
-    window.addEventListener("pointerdown", stop, { once: true, passive: true });
-    window.addEventListener("keydown",     stop, { once: true });
-
     const timer = setTimeout(() => {
+      // If user already scrolled manually before the timer fired, don't take over.
+      if (window.scrollY > 10) return;
+
+      // Register stop listeners now — only while auto-scroll is live.
+      window.addEventListener("wheel",       stop, { once: true, passive: true });
+      window.addEventListener("touchstart",  stop, { once: true, passive: true });
+      window.addEventListener("pointerdown", stop, { once: true, passive: true });
+      window.addEventListener("keydown",     stop, { once: true });
+
       function tick() {
         if (!active) return;
         const max = document.body.scrollHeight - window.innerHeight;
