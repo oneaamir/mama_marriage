@@ -33,51 +33,60 @@ export default function App() {
   }, []);
 
   // Hint scroll: after entrance animations settle, ease down ~120px so the guest
-  // sees the card lift and understands there is content below. Stops automatically.
-  // Any interaction cancels it immediately. Listeners registered only when active
-  // so the music-player's first-touch cannot kill it prematurely.
+  // 3 scroll hints after video ends: each nudges the page down progressively,
+  // pausing between pulses so the guest clearly feels "scroll down".
+  // Any interaction cancels the sequence immediately.
+  // Listeners are registered only when active — prevents music-player's
+  // first-touch from killing the hints before they start.
   useEffect(() => {
     if (!introDone || reduced) return;
 
     let raf;
+    let pauseTimer;
     let cancelled = false;
 
     function cancel() {
       if (cancelled) return;
       cancelled = true;
       cancelAnimationFrame(raf);
+      clearTimeout(pauseTimer);
       window.removeEventListener("wheel",       cancel);
       window.removeEventListener("touchstart",  cancel);
       window.removeEventListener("pointerdown", cancel);
       window.removeEventListener("keydown",     cancel);
     }
 
-    const timer = setTimeout(() => {
-      if (window.scrollY > 10) return; // guest already scrolled — leave them alone
+    // Three progressive targets: each pulse scrolls deeper.
+    const HINTS = [110, 240, 380];
+
+    function runHint(index) {
+      if (cancelled || index >= HINTS.length) { cancel(); return; }
+      const from = window.scrollY;
+      const to   = HINTS[index];
+      const t0   = performance.now();
+      function tick(now) {
+        if (cancelled) return;
+        const p = Math.min(1, (now - t0) / 1500);
+        window.scrollTo(0, from + (to - from) * (1 - Math.pow(1 - p, 3)));
+        if (p < 1) raf = requestAnimationFrame(tick);
+        else pauseTimer = setTimeout(() => runHint(index + 1), 750);
+      }
+      raf = requestAnimationFrame(tick);
+    }
+
+    const startTimer = setTimeout(() => {
+      if (window.scrollY > 10) return; // guest already scrolled
 
       window.addEventListener("wheel",       cancel, { once: true, passive: true });
       window.addEventListener("touchstart",  cancel, { once: true, passive: true });
       window.addEventListener("pointerdown", cancel, { once: true, passive: true });
       window.addEventListener("keydown",     cancel, { once: true });
 
-      const HINT_PX = 120;
-      const HINT_MS = 1800;
-      const t0 = performance.now();
-
-      function tick(now) {
-        if (cancelled) return;
-        const p = Math.min(1, (now - t0) / HINT_MS);
-        const eased = 1 - Math.pow(1 - p, 3); // ease-out cubic
-        window.scrollTo(0, HINT_PX * eased);
-        if (p < 1) raf = requestAnimationFrame(tick);
-        else cancel(); // clean up listeners once hint completes
-      }
-      raf = requestAnimationFrame(tick);
+      runHint(0);
     }, 1400);
 
     return () => {
-      clearTimeout(timer);
-      cancelAnimationFrame(raf);
+      clearTimeout(startTimer);
       cancel();
     };
   }, [introDone, reduced]);
