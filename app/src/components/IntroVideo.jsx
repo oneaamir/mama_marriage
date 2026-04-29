@@ -43,10 +43,10 @@ export default function IntroVideo({ src, poster, onComplete, onPlay }) {
     v.addEventListener("playing", onPlaying);
     tryPlay();
 
-    // If the first frame doesn't start playing within 4s, bail to the website.
+    // If the first frame doesn't start playing within 6s, bail to the website.
     const watchdog = setTimeout(() => {
       if (!playingFired) finish();
-    }, 4000);
+    }, 6000);
     // Hard cap so the intro never holds the page longer than 9s total.
     const safety = setTimeout(finish, 9000);
 
@@ -83,7 +83,7 @@ export default function IntroVideo({ src, poster, onComplete, onPlay }) {
         className="absolute inset-0 w-full h-full object-cover"
         draggable={false}
         decoding="async"
-        fetchpriority="high"
+        fetchPriority="high"
       />
       <video
         ref={videoRef}
@@ -92,7 +92,7 @@ export default function IntroVideo({ src, poster, onComplete, onPlay }) {
         autoPlay
         muted
         playsInline
-        preload="metadata"
+        preload="auto"
         className="absolute inset-0 w-full h-full object-cover"
       />
       <button

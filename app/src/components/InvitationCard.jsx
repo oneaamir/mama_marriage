@@ -171,6 +171,7 @@ export default function InvitationCard({ data, lang, route = "barat", ready }) {
             y: 0,
             scale: 1,
             filter: "blur(0px)",
+            clearProps: "filter",
             boxShadow:
               "0 36px 64px -22px rgba(90,56,24,0.42), 0 18px 32px rgba(90,56,24,0.24), 0 0 80px rgba(248,217,139,0.22), inset 0 0 36px rgba(255,247,232,0.45)",
             ease: "none",
@@ -206,7 +207,6 @@ export default function InvitationCard({ data, lang, route = "barat", ready }) {
       });
 
       gsap.to(heroBgRef.current, {
-        filter: "blur(14px) brightness(1.02)",
         scale: 1.06,
         ease: "none",
         scrollTrigger: {
@@ -291,17 +291,29 @@ export default function InvitationCard({ data, lang, route = "barat", ready }) {
       <section
         ref={heroSectionRef}
         className="relative min-h-[100svh] flex items-center justify-center overflow-hidden"
+        style={{ isolation: "isolate" }}
       >
-        <img
+        {/* Wrapper extends 20px on ALL sides so the image always covers
+            the section edges when GSAP scales it to 1.06 on scroll. */}
+        <div
           ref={heroBgRef}
-          src={data.theme.assets.finalFrame}
-          alt=""
-          className="absolute object-cover"
-          style={{ top: "-16px", bottom: "-16px", left: 0, right: 0, width: "100%", height: "calc(100% + 32px)" }}
-          draggable={false}
-          decoding="async"
-          fetchpriority="high"
-        />
+          className="absolute"
+          style={{ inset: "-20px", backgroundColor: "#f4e8d0" }}
+        >
+          <img
+            onLoad={() => {
+              if (heroBgRef.current) {
+                heroBgRef.current.style.willChange = "transform";
+              }
+            }}
+            src={data.theme.assets.finalFrame}
+            alt=""
+            className="absolute inset-0 w-full h-full object-cover"
+            draggable={false}
+            decoding="async"
+            fetchPriority="high"
+          />
+        </div>
         {/* Hero-only gold dust — restrained and edge-only. Lazy chunk; only
             mounts after intro completes (ready=true) so it never blocks
             first paint. Scoped to the hero section so it never appears
@@ -408,14 +420,10 @@ export default function InvitationCard({ data, lang, route = "barat", ready }) {
               <span
                 aria-hidden
                 className="absolute inset-0 rounded-full border border-antiquegold/45"
-                style={{
-                  backgroundColor: "rgba(255, 247, 232, 0.35)",
-                  backdropFilter: "blur(6px)",
-                  WebkitBackdropFilter: "blur(6px)",
-                }}
+                style={{ backgroundColor: "rgba(251, 241, 217, 0.60)" }}
               />
               <svg
-                className="relative"
+                className="scroll-chevron relative"
                 width="20"
                 height="13"
                 viewBox="0 0 22 14"

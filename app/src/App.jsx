@@ -32,75 +32,6 @@ export default function App() {
     if (data?.meta?.siteTitle) document.title = data.meta.siteTitle;
   }, []);
 
-  // Nudge-and-bounce scroll hint: after the hero entrance settles, the page
-  // dips down gently then floats back up — like the invitation is breathing.
-  // Repeats once after a pause, then rests. Cancels on any interaction.
-  // Stop listeners register only when the animation is live so the music
-  // player's first-touch cannot kill it before it starts.
-  useEffect(() => {
-    if (!introDone || reduced) return;
-
-    let raf;
-    let pauseTimer;
-    let cancelled = false;
-
-    const scroller  = () => document.scrollingElement || document.documentElement;
-    const easeOut   = p => 1 - Math.pow(1 - p, 3);          // glide down
-    const easeInOut = p => -(Math.cos(Math.PI * p) - 1) / 2; // float back
-
-    function cancel() {
-      if (cancelled) return;
-      cancelled = true;
-      cancelAnimationFrame(raf);
-      clearTimeout(pauseTimer);
-      window.removeEventListener("wheel",       cancel);
-      window.removeEventListener("touchstart",  cancel);
-      window.removeEventListener("pointerdown", cancel);
-      window.removeEventListener("keydown",     cancel);
-    }
-
-    function animate(from, to, duration, easeFn, onDone) {
-      const t0 = performance.now();
-      function tick(now) {
-        if (cancelled) return;
-        const p = Math.min(1, (now - t0) / duration);
-        scroller().scrollTop = from + (to - from) * easeFn(p);
-        if (p < 1) raf = requestAnimationFrame(tick);
-        else onDone?.();
-      }
-      raf = requestAnimationFrame(tick);
-    }
-
-    // n=0: first cycle; n=1: second (final) cycle.
-    function runCycle(n) {
-      if (cancelled) return;
-      const nudgeTo  = n === 0 ? 52 : 60;
-      const returnTo = n === 0 ? 18 : 24;
-      animate(scroller().scrollTop, nudgeTo, 650, easeOut, () => {
-        animate(nudgeTo, returnTo, 500, easeInOut, () => {
-          if (n === 0) pauseTimer = setTimeout(() => runCycle(1), 1500);
-          else cancel();
-        });
-      });
-    }
-
-    const startTimer = setTimeout(() => {
-      if (scroller().scrollTop > 10) return; // guest already scrolled — leave them alone
-
-      window.addEventListener("wheel",       cancel, { once: true, passive: true });
-      window.addEventListener("touchstart",  cancel, { once: true, passive: true });
-      window.addEventListener("pointerdown", cancel, { once: true, passive: true });
-      window.addEventListener("keydown",     cancel, { once: true });
-
-      runCycle(0);
-    }, 1400);
-
-    return () => {
-      clearTimeout(startTimer);
-      cancel();
-    };
-  }, [introDone, reduced]);
-
   // Invalid path (anything other than /barat or /walima) → minimal page only.
   // No video, no silk, no particles, no invitation, no footer switch.
   if (!route) {
@@ -121,14 +52,14 @@ export default function App() {
           alt=""
           className="absolute inset-0 w-full h-full object-cover"
           style={{
-            filter: "blur(14px) brightness(1.06) saturate(1.08)",
+            filter: "blur(10px) brightness(1.06) saturate(1.08)",
             transform: "scale(1.06) translateZ(0)",
             willChange: "transform",
           }}
           draggable={false}
-          loading="lazy"
+          loading="eager"
           decoding="async"
-          fetchpriority="low"
+          fetchPriority="high"
         />
         <div
           className="absolute inset-0"

@@ -246,9 +246,18 @@ body {
     animation: slowpulse 5s ease-in-out infinite;
   }
 
+  /* Chevron bounces gently downward — a gravity cue for "scroll". */
+  .scroll-chevron {
+    animation: chevron-bounce 2.4s ease-in-out infinite;
+  }
+
   .tabular {
     font-variant-numeric: tabular-nums;
     font-feature-settings: "tnum";
+  }
+
+  .paper-panel {
+    will-change: transform, opacity;
   }
 
   /* Silk-waves: each layer drifts on a long, eased path. Combined with
@@ -287,6 +296,25 @@ body {
   to   { height: 14px; }
 }
 
+/* border-glint sweep — referenced in .border-glint::after */
+@keyframes glint {
+  0%, 80%, 100% { transform: translateX(-120%); opacity: 0; }
+  40%           { opacity: 0.7; }
+  60%           { transform: translateX(120%); opacity: 0; }
+}
+
+/* scroll-hint breath — referenced in .scroll-hint */
+@keyframes slowpulse {
+  0%, 100% { opacity: 0.6; }
+  50%      { opacity: 1;   }
+}
+
+/* scroll indicator chevron — gravity-pull downward nudge */
+@keyframes chevron-bounce {
+  0%, 100% { transform: translateY(0);   opacity: 1;   }
+  55%      { transform: translateY(5px); opacity: 0.65; }
+}
+
 @keyframes silk-drift-1 {
   0%   { transform: translate(0, 0) scale(1); }
   50%  { transform: translate(6%, -4%) scale(1.06); }
@@ -306,6 +334,7 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .border-glint::after,
   .scroll-hint,
+  .scroll-chevron,
   .gold-foil-shine,
   .silk-layer,
   .music-bar {
