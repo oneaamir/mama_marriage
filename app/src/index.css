@@ -16,6 +16,13 @@ body,
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-family: "Cormorant Garamond", "Lora", "Noto Serif", serif;
+}
+
+/* overflow-x only on body/#root — NOT on html.
+   Setting overflow-x on html blocks programmatic window.scrollTo on iOS Safari
+   and forces overflow-y:auto making #root a scroll container instead of the viewport. */
+body,
+#root {
   overflow-x: hidden;
 }
 

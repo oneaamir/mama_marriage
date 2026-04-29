@@ -59,15 +59,19 @@ export default function App() {
     // Three progressive targets: each pulse scrolls deeper.
     const HINTS = [110, 240, 380];
 
+    // document.scrollingElement is the spec-correct scroll container (works on
+    // all browsers including iOS Safari when overflow-x is set on body/#root).
+    const scroller = () => document.scrollingElement || document.documentElement;
+
     function runHint(index) {
       if (cancelled || index >= HINTS.length) { cancel(); return; }
-      const from = window.scrollY;
+      const from = scroller().scrollTop;
       const to   = HINTS[index];
       const t0   = performance.now();
       function tick(now) {
         if (cancelled) return;
         const p = Math.min(1, (now - t0) / 1500);
-        window.scrollTo(0, from + (to - from) * (1 - Math.pow(1 - p, 3)));
+        scroller().scrollTop = from + (to - from) * (1 - Math.pow(1 - p, 3));
         if (p < 1) raf = requestAnimationFrame(tick);
         else pauseTimer = setTimeout(() => runHint(index + 1), 750);
       }
@@ -75,7 +79,7 @@ export default function App() {
     }
 
     const startTimer = setTimeout(() => {
-      if (window.scrollY > 10) return; // guest already scrolled
+      if (scroller().scrollTop > 10) return; // guest already scrolled
 
       window.addEventListener("wheel",       cancel, { once: true, passive: true });
       window.addEventListener("touchstart",  cancel, { once: true, passive: true });
