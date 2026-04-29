@@ -3,6 +3,8 @@ import { useEffect, useRef, useState } from "react";
 const VOLUME_TOP = 0.55;
 const VOLUME_BOTTOM = 0.28;
 const FADE_MS = 1200;
+const FADE_OUT_MS = 1500;
+const AUTO_STOP_MS = 60_000;
 
 function scrollVolume() {
   const depth = window.scrollY / (window.innerHeight * 2);
@@ -13,6 +15,7 @@ function scrollVolume() {
 export default function MusicPlayer({ src, videoStarted }) {
   const audioRef = useRef(null);
   const fadeRafRef = useRef(null);
+  const stopTimerRef = useRef(null);
   const playingRef = useRef(false);
   const [playing, setPlaying] = useState(false);
   const [muted, setMuted] = useState(() => {
@@ -32,6 +35,7 @@ export default function MusicPlayer({ src, videoStarted }) {
       audio.pause();
       audio.src = "";
       if (fadeRafRef.current) cancelAnimationFrame(fadeRafRef.current);
+      if (stopTimerRef.current) clearTimeout(stopTimerRef.current);
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -67,6 +71,23 @@ export default function MusicPlayer({ src, videoStarted }) {
           if (p < 1) fadeRafRef.current = requestAnimationFrame(tick);
         }
         fadeRafRef.current = requestAnimationFrame(tick);
+        // Auto-stop: fade out after 1 minute then pause.
+        stopTimerRef.current = setTimeout(() => {
+          const startVol = audio.volume;
+          const t1 = performance.now();
+          function fadeOut(now) {
+            const p = Math.min(1, (now - t1) / FADE_OUT_MS);
+            audio.volume = startVol * (1 - p);
+            if (p < 1) {
+              fadeRafRef.current = requestAnimationFrame(fadeOut);
+            } else {
+              audio.pause();
+              playingRef.current = false;
+              setPlaying(false);
+            }
+          }
+          fadeRafRef.current = requestAnimationFrame(fadeOut);
+        }, AUTO_STOP_MS);
       }).catch(() => {
         // Blocked by browser — will retry on next event.
       });
