@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-export default function IntroVideo({ src, poster, onComplete }) {
+export default function IntroVideo({ src, poster, onComplete, onPlay }) {
   const videoRef = useRef(null);
   const [fading, setFading] = useState(false);
   const [hidden, setHidden] = useState(false);
@@ -35,6 +35,7 @@ export default function IntroVideo({ src, poster, onComplete }) {
     const onErr = () => finish();
     const onPlaying = () => {
       playingFired = true;
+      onPlay?.();
     };
 
     v.addEventListener("ended", onEnded);

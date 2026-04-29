@@ -10,24 +10,24 @@ function scrollVolume() {
   return VOLUME_TOP - (VOLUME_TOP - VOLUME_BOTTOM) * clamped;
 }
 
-export default function MusicPlayer({ src }) {
+export default function MusicPlayer({ src, videoStarted }) {
   const audioRef = useRef(null);
   const fadeRafRef = useRef(null);
+  const playingRef = useRef(false);
   const [playing, setPlaying] = useState(false);
   const [muted, setMuted] = useState(() => {
     try { return sessionStorage.getItem("music-muted") === "1"; } catch { return false; }
   });
-  const startedRef = useRef(false);
 
-  // Mount: create audio element once.
+  // Create audio element and begin buffering immediately.
   useEffect(() => {
     const audio = new Audio();
     audio.loop = true;
-    audio.preload = "none";
+    audio.preload = "auto"; // buffer right away so play() starts with no lag
     audio.volume = 0;
     audio.muted = muted;
+    audio.src = src;
     audioRef.current = audio;
-
     return () => {
       audio.pause();
       audio.src = "";
@@ -36,70 +36,80 @@ export default function MusicPlayer({ src }) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Sync muted state → audio element whenever it changes.
+  // Sync muted toggle → audio element.
   useEffect(() => {
     if (audioRef.current) audioRef.current.muted = muted;
     try { sessionStorage.setItem("music-muted", muted ? "1" : "0"); } catch {}
   }, [muted]);
 
-  // First-interaction trigger.
+  // Core: attempt play. Can be called from multiple triggers.
+  const attemptPlay = useRef(null);
   useEffect(() => {
-    function start() {
-      if (startedRef.current) return;
-      startedRef.current = true;
+    const audio = audioRef.current;
+    if (!audio) return;
 
-      const audio = audioRef.current;
-      if (!audio) return;
-
-      audio.src = src;
+    function doPlay() {
+      if (playingRef.current) return;
       audio.volume = 0;
-
       audio.play().then(() => {
+        playingRef.current = true;
         setPlaying(true);
-        // Fade volume 0 → target over FADE_MS.
+        // Remove interaction listeners — no longer needed.
+        window.removeEventListener("click", doPlay);
+        window.removeEventListener("touchstart", doPlay);
+        window.removeEventListener("scroll", doPlay);
+        // Fade volume in.
         const target = scrollVolume();
-        const startTime = performance.now();
+        const t0 = performance.now();
         function tick(now) {
-          const t = Math.min(1, (now - startTime) / FADE_MS);
-          audio.volume = t * target;
-          if (t < 1) fadeRafRef.current = requestAnimationFrame(tick);
+          const p = Math.min(1, (now - t0) / FADE_MS);
+          audio.volume = p * target;
+          if (p < 1) fadeRafRef.current = requestAnimationFrame(tick);
         }
         fadeRafRef.current = requestAnimationFrame(tick);
       }).catch(() => {
-        // Autoplay blocked even after gesture on some browsers — silently ignore.
-        startedRef.current = false;
+        // Blocked by browser — will retry on next event.
       });
     }
 
-    window.addEventListener("click", start, { once: true, passive: true });
-    window.addEventListener("touchstart", start, { once: true, passive: true });
-    window.addEventListener("scroll", start, { once: true, passive: true });
+    attemptPlay.current = doPlay;
+
+    // Attempt 1: immediately on mount (works in some browsers/contexts).
+    doPlay();
+
+    // Attempt 2: on any first user interaction.
+    window.addEventListener("click", doPlay, { passive: true });
+    window.addEventListener("touchstart", doPlay, { passive: true });
+    window.addEventListener("scroll", doPlay, { passive: true });
 
     return () => {
-      window.removeEventListener("click", start);
-      window.removeEventListener("touchstart", start);
-      window.removeEventListener("scroll", start);
+      window.removeEventListener("click", doPlay);
+      window.removeEventListener("touchstart", doPlay);
+      window.removeEventListener("scroll", doPlay);
     };
-  }, [src]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Attempt 3: when the intro video starts playing — its gesture context
+  // sometimes unlocks audio on older iOS / some Android WebViews.
+  useEffect(() => {
+    if (videoStarted) attemptPlay.current?.();
+  }, [videoStarted]);
 
   // Scroll-breathing volume.
   useEffect(() => {
     function onScroll() {
       const audio = audioRef.current;
-      if (!audio || !playing || audio.muted) return;
+      if (!audio || !playingRef.current || audio.muted) return;
       audio.volume = scrollVolume();
     }
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, [playing]);
-
-  function toggleMute() {
-    setMuted((m) => !m);
-  }
+  }, []);
 
   return (
     <button
-      onClick={toggleMute}
+      onClick={() => setMuted((m) => !m)}
       aria-label={muted ? "Unmute music" : "Mute music"}
       className={`fixed bottom-6 right-5 z-50 w-11 h-11 rounded-full flex items-center justify-center gap-[3px] border border-antiquegold/70 transition-opacity duration-500 ${muted ? "music-muted" : ""}`}
       style={{

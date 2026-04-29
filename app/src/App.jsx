@@ -16,6 +16,7 @@ export default function App() {
   const { lang, toggle } = useLanguage(data.meta.defaultLanguage || "en");
   const { route } = useRoute();
   const [introDone, setIntroDone] = useState(false);
+  const [videoStarted, setVideoStarted] = useState(false);
   const [reduced, setReduced] = useState(false);
 
   useEffect(() => {
@@ -81,7 +82,7 @@ export default function App() {
       </div>
 
       <LanguageToggle lang={lang} onToggle={toggle} />
-      <MusicPlayer src={data.theme.assets.music} />
+      <MusicPlayer src={data.theme.assets.music} videoStarted={videoStarted} />
 
       {introDone && !reduced && (
         <Suspense fallback={null}>
@@ -93,6 +94,7 @@ export default function App() {
         src={data.theme.assets.introVideo}
         poster={data.theme.assets.finalFrame}
         onComplete={() => setIntroDone(true)}
+        onPlay={() => setVideoStarted(true)}
       />
 
       <main className="relative z-10">
