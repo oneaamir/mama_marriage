@@ -32,49 +32,53 @@ export default function App() {
     if (data?.meta?.siteTitle) document.title = data.meta.siteTitle;
   }, []);
 
-  // Auto-scroll: drifts slowly after hero settles; any manual interaction stops it.
-  // Stop listeners are registered only when the scroll is actually active — this
-  // prevents the music-player's first-interaction touch/click from killing it early.
+  // Hint scroll: after entrance animations settle, ease down ~120px so the guest
+  // sees the card lift and understands there is content below. Stops automatically.
+  // Any interaction cancels it immediately. Listeners registered only when active
+  // so the music-player's first-touch cannot kill it prematurely.
   useEffect(() => {
     if (!introDone || reduced) return;
 
     let raf;
-    let active = true;
+    let cancelled = false;
 
-    function stop() {
-      if (!active) return;
-      active = false;
+    function cancel() {
+      if (cancelled) return;
+      cancelled = true;
       cancelAnimationFrame(raf);
-      window.removeEventListener("wheel",       stop);
-      window.removeEventListener("touchstart",  stop);
-      window.removeEventListener("pointerdown", stop);
-      window.removeEventListener("keydown",     stop);
+      window.removeEventListener("wheel",       cancel);
+      window.removeEventListener("touchstart",  cancel);
+      window.removeEventListener("pointerdown", cancel);
+      window.removeEventListener("keydown",     cancel);
     }
 
     const timer = setTimeout(() => {
-      // If user already scrolled manually before the timer fired, don't take over.
-      if (window.scrollY > 10) return;
+      if (window.scrollY > 10) return; // guest already scrolled — leave them alone
 
-      // Register stop listeners now — only while auto-scroll is live.
-      window.addEventListener("wheel",       stop, { once: true, passive: true });
-      window.addEventListener("touchstart",  stop, { once: true, passive: true });
-      window.addEventListener("pointerdown", stop, { once: true, passive: true });
-      window.addEventListener("keydown",     stop, { once: true });
+      window.addEventListener("wheel",       cancel, { once: true, passive: true });
+      window.addEventListener("touchstart",  cancel, { once: true, passive: true });
+      window.addEventListener("pointerdown", cancel, { once: true, passive: true });
+      window.addEventListener("keydown",     cancel, { once: true });
 
-      function tick() {
-        if (!active) return;
-        const max = document.body.scrollHeight - window.innerHeight;
-        if (window.scrollY >= max) { stop(); return; }
-        window.scrollBy(0, 0.45);
-        raf = requestAnimationFrame(tick);
+      const HINT_PX = 120;
+      const HINT_MS = 1800;
+      const t0 = performance.now();
+
+      function tick(now) {
+        if (cancelled) return;
+        const p = Math.min(1, (now - t0) / HINT_MS);
+        const eased = 1 - Math.pow(1 - p, 3); // ease-out cubic
+        window.scrollTo(0, HINT_PX * eased);
+        if (p < 1) raf = requestAnimationFrame(tick);
+        else cancel(); // clean up listeners once hint completes
       }
       raf = requestAnimationFrame(tick);
-    }, 2200);
+    }, 1400);
 
     return () => {
       clearTimeout(timer);
       cancelAnimationFrame(raf);
-      stop();
+      cancel();
     };
   }, [introDone, reduced]);
 
