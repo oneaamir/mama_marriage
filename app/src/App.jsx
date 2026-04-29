@@ -32,6 +32,46 @@ export default function App() {
     if (data?.meta?.siteTitle) document.title = data.meta.siteTitle;
   }, []);
 
+  // Auto-scroll: drifts slowly after hero settles; any manual interaction stops it.
+  useEffect(() => {
+    if (!introDone || reduced) return;
+
+    let raf;
+    let active = true;
+
+    function stop() {
+      if (!active) return;
+      active = false;
+      cancelAnimationFrame(raf);
+      window.removeEventListener("wheel",       stop);
+      window.removeEventListener("touchstart",  stop);
+      window.removeEventListener("pointerdown", stop);
+      window.removeEventListener("keydown",     stop);
+    }
+
+    window.addEventListener("wheel",       stop, { once: true, passive: true });
+    window.addEventListener("touchstart",  stop, { once: true, passive: true });
+    window.addEventListener("pointerdown", stop, { once: true, passive: true });
+    window.addEventListener("keydown",     stop, { once: true });
+
+    const timer = setTimeout(() => {
+      function tick() {
+        if (!active) return;
+        const max = document.body.scrollHeight - window.innerHeight;
+        if (window.scrollY >= max) { stop(); return; }
+        window.scrollBy(0, 0.45);
+        raf = requestAnimationFrame(tick);
+      }
+      raf = requestAnimationFrame(tick);
+    }, 2200);
+
+    return () => {
+      clearTimeout(timer);
+      cancelAnimationFrame(raf);
+      stop();
+    };
+  }, [introDone, reduced]);
+
   // Invalid path (anything other than /barat or /walima) → minimal page only.
   // No video, no silk, no particles, no invitation, no footer switch.
   if (!route) {

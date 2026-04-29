@@ -97,11 +97,20 @@ export default function InvitationCard({ data, lang, route = "barat", ready }) {
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     const ctx = gsap.context(() => {
+      gsap.from(coverCardRef.current, {
+        opacity: 0,
+        scale: 0.96,
+        filter: "blur(4px)",
+        duration: 0.9,
+        delay: 0.1,
+        ease: "power2.out",
+        clearProps: "filter",
+      });
       gsap.from(heroBlockRef.current, {
         opacity: 0,
         y: 14,
         duration: 0.85,
-        delay: 0,
+        delay: 0.2,
         ease: "power2.out",
       });
       gsap.from(scrollHintRef.current, {
@@ -287,7 +296,8 @@ export default function InvitationCard({ data, lang, route = "barat", ready }) {
           ref={heroBgRef}
           src={data.theme.assets.finalFrame}
           alt=""
-          className="absolute inset-0 w-full h-full object-cover"
+          className="absolute object-cover"
+          style={{ inset: "-16px", width: "calc(100% + 32px)", height: "calc(100% + 32px)" }}
           draggable={false}
           decoding="async"
           fetchpriority="high"

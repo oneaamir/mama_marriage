@@ -18,7 +18,7 @@ export default function IntroVideo({ src, poster, onComplete, onPlay }) {
       finished = true;
       onComplete && onComplete();
       setFading(true);
-      setTimeout(() => setHidden(true), 700);
+      setTimeout(() => setHidden(true), 1000);
     };
 
     const tryPlay = async () => {
@@ -71,7 +71,7 @@ export default function IntroVideo({ src, poster, onComplete, onPlay }) {
 
   return (
     <div
-      className="fixed inset-0 z-[60] bg-ivory transition-opacity duration-[700ms] ease-out"
+      className="fixed inset-0 z-[60] bg-ivory transition-opacity duration-[1000ms] ease-out"
       style={{ opacity: fading ? 0 : 1, pointerEvents: fading ? "none" : "auto" }}
       aria-hidden={fading}
     >
